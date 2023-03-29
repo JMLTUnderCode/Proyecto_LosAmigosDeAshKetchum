@@ -17,7 +17,7 @@ OBJDIR   =
 
 OBJS 		 = proyect_2_op1_AstridJhonaikerJunior.o
 
-LIBRERYS = standard_lib.h
+LIBRERYS = readExtractFlags.h
 
 PROGRAM  = fameChecker
 

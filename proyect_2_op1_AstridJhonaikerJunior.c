@@ -15,7 +15,7 @@
  * 
  */
 
-#include "standard_lib.h"
+#include "readExtractFlags.h"
 
 int main(int argc, char *argv[]){
   // Verificacion de argumentos de entrada.
@@ -61,93 +61,4 @@ int main(int argc, char *argv[]){
 		return EXIT_FAILURE;
 	}
 	return EXIT_SUCCESS;
-}
-
-/******************************************************************/
-/*  Definiciones y encabezados de funciones en "standard_lib.h"   */
-/******************************************************************/
-
-
-int init_structs(int argc, char *argv[]){
-	// Inicial de todas los flags.
-	Flags_Active.Region = 0;
-	Flags_Active.Species = 0;
-	Flags_Active.Type = 0;
-	Flags_Active.Nocount = 0;
-	Flags_Active.List = 0;
-	Flags_Active.Size = 0;
-	Flags_Active.Name = 0;
-	
-	// Extraccion de Flags.
-	int cnt = 1;
-	int exit_mode = TRUE;
-	while(cnt < argc){
-		if(argv[cnt][0] == '-'){
-			if( strcmp(argv[cnt], "-r") == 0 ) {
-				Flags_Active.Region = 1;
-				cnt++;
-				if(argv[cnt][0] != '-'){
-					strncpy(Flags_Active.info_region, argv[cnt], 64);
-				} else {
-					exit_mode = FALSE;
-					break;
-				}
-
-			} else if ( strcmp(argv[cnt], "-s") == 0 ) {
-				Flags_Active.Species = 1;
-				cnt++;
-				if(argv[cnt][0] != '-'){
-					strncpy(Flags_Active.info_species, argv[cnt], 64);
-				} else {
-					exit_mode = FALSE;
-					break;
-				}
-
-			} else if ( strcmp(argv[cnt], "-t") == 0 ){
-				Flags_Active.Type = 1;
-				cnt++;
-				if(argv[cnt][0] != '-'){
-					strncpy(Flags_Active.info_type, argv[cnt], 64);
-				} else {
-					exit_mode = FALSE;
-					break;
-				}
-			} else if ( strcmp(argv[cnt], "--nocount") == 0 ) {
-				Flags_Active.Nocount = 1;
-
-			} else if ( strcmp(argv[cnt], "--list") == 0 ){
-				Flags_Active.List = 1;
-
-			} else if ( strcmp(argv[cnt], "--size") == 0 ) {
-				Flags_Active.Size = 1;
-
-			} else {
-				exit_mode = FALSE;
-				break;
-			}
-		
-		} else if ( Flags_Active.Name == 0 ) {
-			Flags_Active.Name = 1;
-			strncpy(Flags_Active.info_name, argv[cnt], 64);
-			
-		} else {
-			exit_mode = FALSE;
-			break;
-		}
-		cnt++;
-	}
-	if(exit_mode){
-		return TRUE;
-	} else {
-		ErrorArgument(argc, argv);
-		return FALSE;
-	}
-}
-
-void ErrorArgument(int argc, char *argv[]){
-	printf("Error: Number/Names of arguments is incorrent.\n");
-	printf("Usage: %s ", argv[0]);
-	FORE(k, 1, argc)
-		printf(" %s", argv[k]);
-	printf("\nCorrect: ./fameChecker [-r <region>] [-s <species>] [-t <type>] [--nocount] [--list] [--size] [name]\n");
 }
