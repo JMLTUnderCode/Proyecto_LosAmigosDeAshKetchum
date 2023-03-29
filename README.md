@@ -1,6 +1,3 @@
 # Proyecto_2_Op1
-Proyecto numero 2 del curso Sistemas Operativos 1 de la Universidad Simón Bolívar.
-Participantes:
-Astrid Alvarado
-Jhonaiker Blanco
-Junior Lara
+Proyecto 2 de Sistemas Operativos 1 - Universidad Simon Bolivar Enero-Marzo 2023. 
+Participantes: Astrid Alvarado, Laura Parilli, Jhonaiker Blanco, Junior Lara.
