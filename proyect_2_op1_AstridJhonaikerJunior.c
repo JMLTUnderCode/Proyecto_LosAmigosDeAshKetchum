@@ -21,9 +21,13 @@ int main(int argc, char *argv[]){
   // Verificacion de argumentos de entrada.
 	if(argc > 1 && argc < 12){
 
-		// Inicializacion de estructuras fundamentales y Extraccion de flags.
-		if(init_structs(argc, argv) == FALSE)
+		// Inicializacion y verificacion de exito de estructuras fundamentales
+		// y Extraccion de flags.
+		struct flags Flags_Active = init_structs(argc, argv);
+		if(Flags_Active.EXIT_MODE){ 
+			ErrorArgument(argc, argv);
 			return EXIT_FAILURE;
+		}
 
 		// CHECK ESTRUCTURA FLAGS ACTIVE
 		if(Flags_Active.Region){

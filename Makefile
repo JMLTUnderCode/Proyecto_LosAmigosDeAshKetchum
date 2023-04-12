@@ -13,15 +13,13 @@ LINK 		 = cc
 
 FILE 		 = proyect_2_op1_AstridJhonaikerJunior.c
 
-OBJDIR   = 
+OBJDIR   = ProyectFiles
 
-OBJS 		 = proyect_2_op1_AstridJhonaikerJunior.o
-
-LIBRERYS = readExtractFlags.h
+OBJS 		 = $(OBJDIR)/search_inodo.o $(OBJDIR)/readExtractFlags.o $(OBJDIR)/proyect_2_op1_AstridJhonaikerJunior.o
 
 PROGRAM  = fameChecker
 
-FLAGS    = -pthread
+FLAGS    = -pthread -o
 
 ###################################################
 # Especificacion de Parametros para Make.
@@ -33,19 +31,25 @@ all: $(PROGRAM)
 clean: 
 	rm $(PROGRAM)
 	rm $(OBJS)
-#	rm $(OBJDIR)
+	rmdir $(OBJDIR)
 
 ##################################################
 # Compilacion de archivos.
 
-$(OBJS): $(FILE) $(LIBRERYS)
-	$(COMP) $(FILE) $(FLAGS) -o $(OBJS)
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+$(OBJDIR)/readExtractFlags.o: readExtractFlags.c $(OBJDIR) readExtractFlags.h
+	$(COMP) readExtractFlags.c $(FLAGS) $(OBJDIR)/readExtractFlags.o
+
+$(OBJDIR)/search_inodo.o: search_inodo.c $(OBJDIR) search_inodo.h
+	$(COMP) search_inodo.c $(FLAGS) $(OBJDIR)/search_inodo.o
+
+$(OBJDIR)/proyect_2_op1_AstridJhonaikerJunior.o: proyect_2_op1_AstridJhonaikerJunior.c $(OBJDIR) readExtractFlags.h search_inodo.h
+	$(COMP) proyect_2_op1_AstridJhonaikerJunior.c $(FLAGS) $(OBJDIR)/proyect_2_op1_AstridJhonaikerJunior.o
 
 $(PROGRAM): $(OBJS)
-	$(LINK) $(OBJS) $(FLAGS) -o $(PROGRAM)
-
-#$(OBJDIR):
-#	mkdir $(OBJDIR)
+	$(LINK) $(OBJS) $(FLAGS) $(PROGRAM)
 
 #################################################
 

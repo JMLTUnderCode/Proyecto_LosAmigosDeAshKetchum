@@ -1,3 +1,7 @@
+// Libreria estandar .h que incluye librerias basicas y fundamentales
+// para el lenguaje C. Esta libreria se encarga de definir directivas, 
+// macros, definiciones de funciones basicas usadas recurrentemente en C.
+
 /***********************************************************************************/
 // Inclusiones de librerias C.
 #include <stdlib.h>
@@ -35,42 +39,4 @@
 	({ typeof (x) _x = (x); \
 			typeof (y) _y = (y); \
 			_x > _y ? _x : _y; })
-
-// Buffers y Constantes Macros.
-#define buf_flag 64     // Buff para la informacion de los argumentos.
-
-// Estructura de datos para almacenar la informacion de los flahs activos
-// segun la serie de argumentos datos por consola.
-struct flags {
-	int Region;
-	char info_region[buf_flag];
-	int Species;
-	char info_species[buf_flag];
-	int Type;
-	char info_type[buf_flag];
-	int Nocount;
-	int List;
-	int Size;
-	int Name;
-	char info_name[buf_flag];
-};
-
-struct flags Flags_Active;
-
-/***********************************************************************************/
-// Descripcion y definicion de funciones.
-
-
-
-// Funcion encargada de inicializar todas las estructuras globales
-// en algun valor default y principalmente extraer la informacion de los
-// argumentos. Retorna true en caso de flags correcto y extraccion
-// exitosa, en caso contrario muestra los posibles errores.
-int init_structs(int, char **);
-
-// Funcion encargada de mostrar errores de llamado al programa.
-// Cuando no se ingresan los archivos o la cantidad correcta.
-void ErrorArgument(int, char **);
-
-/***********************************************************************************/
 
