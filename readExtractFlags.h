@@ -4,6 +4,9 @@
 
 #include "standard_lib.h"
 
+#ifndef readExtractFlags_H
+#define readExtractFlags_H
+
 // Buffers y Constantes Macros.
 #define buf_flag 64     // Buff para la informacion de los argumentos.
 
@@ -37,6 +40,7 @@ void ErrorArgument(int, char**);
 // extraidos por consola.
 struct flags init_structs(int, char**);
 
+#endif
 /***********************************************************************************/
 
 

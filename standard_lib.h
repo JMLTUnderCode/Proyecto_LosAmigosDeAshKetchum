@@ -13,6 +13,9 @@
 #include <semaphore.h>
 #include <sys/time.h>
 #include <unistd.h>
+#include <dirent.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 /***********************************************************************************/
 // Descripcion, definicion, creacion e inicializacion de variables globales.

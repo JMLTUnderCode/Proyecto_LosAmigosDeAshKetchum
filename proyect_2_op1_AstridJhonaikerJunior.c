@@ -16,10 +16,12 @@
  */
 
 #include "readExtractFlags.h"
+#include "search_inodo.h"
 
 int main(int argc, char *argv[]){
   // Verificacion de argumentos de entrada.
 	if(argc > 1 && argc < 12){
+		char path[PATH_MAX];
 
 		// Inicializacion y verificacion de exito de estructuras fundamentales
 		// y Extraccion de flags.
@@ -30,7 +32,7 @@ int main(int argc, char *argv[]){
 		}
 
 		// CHECK ESTRUCTURA FLAGS ACTIVE
-		if(Flags_Active.Region){
+		/*if(Flags_Active.Region){
 			printf("\nRegion: %s", Flags_Active.info_region);
 		}
 		if(Flags_Active.Species){
@@ -58,7 +60,14 @@ int main(int argc, char *argv[]){
 			printf("\nName: %s", Flags_Active.info_name);
 		}
 		printf("\n");
+		*/
 		// FIN CHECK ESTRUCTURA.
+		if(getcwd(path, sizeof(path)) == NULL){
+			perror("Error getting the current path");
+			return EXIT_FAILURE;
+		}
+
+		search_directories(path, Flags_Active, 0);
 			
 	} else {
 		ErrorArgument(argc, argv);
