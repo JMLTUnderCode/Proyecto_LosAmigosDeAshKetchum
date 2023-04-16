@@ -69,31 +69,14 @@ void search_directories(char* dir_name, struct flags act_flags, int level){
 	}
 
 	//leemos las entradas del directorio
-	if(level < 3){
-		switch(level){
-			case 0:
-				if(act_flags.Region == 1){
-					strcpy(goal, act_flags.info_region);
-				}
-				break;
-			case 1:
-				if(act_flags.Species == 1){	
-					//printf("%s\n", act_flags.info_species);
-					strcpy(goal, act_flags.info_species);
-				}
-				break;
-			case 2:
-				if(act_flags.Type == 1){
-					strcpy(goal, act_flags.info_type);
-				}
-				break;
-			default:
-				break;
-		}
-	}else{
-		if(act_flags.Name != 0){
-			strcpy(goal, act_flags.info_name);
-		}
+	if(level == 0 && act_flags.Region){
+		strcpy(goal, act_flags.info_region);
+	}else if(level == 1 && act_flags.Species){
+		strcpy(goal, act_flags.info_species);
+	}else if(level == 2 && act_flags.Type){
+		strcpy(goal, act_flags.info_type);
+	}else if(act_flags.Name){
+		strcpy(goal, act_flags.info_name);
 	}
 	
 	//entry = readdir(directory);
@@ -103,7 +86,7 @@ void search_directories(char* dir_name, struct flags act_flags, int level){
 			continue;
 		}
 
-		if(directory_exits(level, entry->d_name, goal, act_flags)){
+		if(directory_exits(level, entry->d_name, goal, act_flags) == TRUE){
 			//printf("file -> %s\n", entry->d_name);
 			fd = open(entry->d_name, O_RDONLY);
 			if(fd < 1){
@@ -120,7 +103,9 @@ void search_directories(char* dir_name, struct flags act_flags, int level){
 				}
 				search_directories(entry->d_name, act_flags, level+1);
 			}else{
-				printf("file: %s\n", entry->d_name);
+				if(strstr(entry->d_name, ".html") != NULL){
+					printf("file: %s\n", entry->d_name);
+				}
 			}
 			close(fd);
 		}
