@@ -37,13 +37,13 @@ void ErrorArgument(int argc, char *argv[]){
 struct flags init_structs(int argc, char *argv[]){
 	// Inicial de todas los flags.
 	struct flags Flags_Active;
-	Flags_Active.Region = 0;
-	Flags_Active.Species = 0;
-	Flags_Active.Type = 0;
-	Flags_Active.Nocount = 0;
-	Flags_Active.List = 0;
-	Flags_Active.Size = 0;
-	Flags_Active.Name = 0;
+	Flags_Active.Region = FALSE;
+	Flags_Active.Species = FALSE;
+	Flags_Active.Type = FALSE;
+	Flags_Active.Nocount = FALSE;
+	Flags_Active.List = FALSE;
+	Flags_Active.Size = FALSE;
+	Flags_Active.Name = FALSE;
 	Flags_Active.EXIT_MODE = FALSE;
 	
 	// Extraccion de Flags.
@@ -51,7 +51,7 @@ struct flags init_structs(int argc, char *argv[]){
 	while(cnt < argc){
 		if(argv[cnt][0] == '-'){
 			if( strcmp(argv[cnt], "-r") == 0 ) {
-				Flags_Active.Region = 1;
+				Flags_Active.Region = TRUE;
 				cnt++;
 				if(argv[cnt][0] != '-'){
 					strncpy(Flags_Active.info_region, argv[cnt], 64);
@@ -61,7 +61,7 @@ struct flags init_structs(int argc, char *argv[]){
 				}
 
 			} else if ( strcmp(argv[cnt], "-s") == 0 ) {
-				Flags_Active.Species = 1;
+				Flags_Active.Species = TRUE;
 				cnt++;
 				if(argv[cnt][0] != '-'){
 					strncpy(Flags_Active.info_species, argv[cnt], 64);				
@@ -71,7 +71,7 @@ struct flags init_structs(int argc, char *argv[]){
 				}
 
 			} else if ( strcmp(argv[cnt], "-t") == 0 ){
-				Flags_Active.Type = 1;
+				Flags_Active.Type = TRUE;
 				cnt++;
 				if(argv[cnt][0] != '-'){
 					strncpy(Flags_Active.info_type, argv[cnt], 64);
@@ -80,13 +80,13 @@ struct flags init_structs(int argc, char *argv[]){
 					break;
 				}
 			} else if ( strcmp(argv[cnt], "--nocount") == 0 || strcmp(argv[cnt], "-c") == 0 ) {
-				Flags_Active.Nocount = 1;
+				Flags_Active.Nocount = TRUE;
 
 			} else if ( strcmp(argv[cnt], "--list") == 0 || strcmp(argv[cnt], "-l") == 0 ){
-				Flags_Active.List = 1;
+				Flags_Active.List = TRUE;
 
 			} else if ( strcmp(argv[cnt], "--size") == 0 || strcmp(argv[cnt], "-sz") == 0 ) {
-				Flags_Active.Size = 1;
+				Flags_Active.Size = TRUE;
 
 			} else {
 				Flags_Active.EXIT_MODE = TRUE;
@@ -94,7 +94,7 @@ struct flags init_structs(int argc, char *argv[]){
 			}
 		
 		} else if ( Flags_Active.Name == 0 ) {
-			Flags_Active.Name = 1;
+			Flags_Active.Name = TRUE;
 			strncpy(Flags_Active.info_name, argv[cnt], 64);
 			
 		} else {
