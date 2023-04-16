@@ -12,7 +12,7 @@ int directory_exits(int level, char* folder, char* goal, struct flags act_flags)
 	}else if(level == 2 && (strcmp(folder, goal) == 0 || !act_flags.Type)){
 		printf("tipo\n");
 		return TRUE;
-	}else{
+	}else if(level == 3){
 		if(!act_flags.Name){
 			return TRUE;
 		}
