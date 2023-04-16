@@ -21,8 +21,10 @@
 int main(int argc, char *argv[]){
   // Verificacion de argumentos de entrada.
 	if(argc > 1 && argc < 12){
+		long int total_size = 0;
+		int count = 0;
 		char path[PATH_MAX];
-
+		
 		// Inicializacion y verificacion de exito de estructuras fundamentales
 		// y Extraccion de flags.
 		struct flags Flags_Active = init_structs(argc, argv);
@@ -66,8 +68,17 @@ int main(int argc, char *argv[]){
 			perror("Error getting the current path");
 			return EXIT_FAILURE;
 		}
-
-		search_directories(path, Flags_Active, 0);
+		
+		search_directories(path, Flags_Active, 0, &count, &total_size);
+		
+		printf("\n");
+		if(!Flags_Active.Nocount){
+			printf("Total files found: %d\n", count);
+		}
+		
+		if(Flags_Active.Size && !Flags_Active.List){
+			printf("Total amount of information found: %ldKb\n", total_size);
+		}
 			
 	} else {
 		ErrorArgument(argc, argv);

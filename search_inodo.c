@@ -1,16 +1,27 @@
 #include "search_inodo.h"
 
+void print_info_file(char* file, struct flags act_flags, long int size){
+	if(act_flags.List){
+		if(!act_flags.Size){
+			printf("%s\n", file);
+		}else{
+			printf("%s | size: %ldKb\n", file, size);
+		}
+	}
+}
+
+
 int directory_exits(int level, char* folder, char* goal, struct flags act_flags){
 	char* temp;
 
 	if(level == 0 && (strcmp(folder, goal) == 0 || !act_flags.Region)){
-		printf("region\n");
+		//printf("region\n");
 		return TRUE;
 	}else if(level == 1 && (strcmp(folder, goal) == 0 || !act_flags.Species)){
-		printf("especie\n");
+		//printf("especie\n");
 		return TRUE;
 	}else if(level == 2 && (strcmp(folder, goal) == 0 || !act_flags.Type)){
-		printf("tipo\n");
+		//printf("tipo\n");
 		return TRUE;
 	}else if(level == 3){
 		if(!act_flags.Name){
@@ -41,7 +52,7 @@ int directory_exits(int level, char* folder, char* goal, struct flags act_flags)
  *	act_flags: flags activas al momento de usar el programa. Condicionan la búsqueda.
  */
 
-void search_directories(char* dir_name, struct flags act_flags, int level){
+void search_directories(char* dir_name, struct flags act_flags, int level, int* count, long int* total_size){
 	DIR *directory;
 	struct dirent *entry;
 	struct stat status;
@@ -60,7 +71,7 @@ void search_directories(char* dir_name, struct flags act_flags, int level){
 
 	chdir(dir_name);
 
-	printf("reading files (1) in %s\n", dir_name);
+	//printf("reading files in level: %d folder: %s\n", level, dir_name);
 	
 	goal = calloc(64, sizeof(char));
 	if(goal == NULL){
@@ -101,11 +112,14 @@ void search_directories(char* dir_name, struct flags act_flags, int level){
 				if(strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0 ){
 					continue;
 				}
-				search_directories(entry->d_name, act_flags, level+1);
+				search_directories(entry->d_name, act_flags, level+1, count, total_size);
 			}else{
 				if(strstr(entry->d_name, ".html") != NULL){
-					printf("file: %s\n", entry->d_name);
+					print_info_file(entry->d_name, act_flags, status.st_size/1024);
+					*(count)+=1;
+					*(total_size) += (status.st_size/1024);	
 				}
+
 			}
 			close(fd);
 		}
