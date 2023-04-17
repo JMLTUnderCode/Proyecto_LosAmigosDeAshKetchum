@@ -118,6 +118,7 @@ void search_directories(char *dir_name, struct flags act_flags, int level, int *
 			// Caso donde no puede leerse la informacion del archivo.
 			else if (fstat(fd, &status) == -1){
 				printf("Error: can't get the file information of: %s\n", entry->d_name);
+				return;
 			}
 			
 			//si la entrada actual es de tipo DIRECTORIO
