@@ -12,75 +12,53 @@
  *
  * PD:
  *
- * 
+ *
  */
 
 #include "readExtractFlags.h"
 #include "search_inodo.h"
 
 int main(int argc, char *argv[]){
-  // Verificacion de argumentos de entrada.
-	if(argc > 1 && argc < 12){
+	// Verificacion de argumentos de entrada.
+	if (argc > 1 && argc < 12){
 		long int total_size = 0;
 		int count = 0;
 		char path[PATH_MAX];
-		
+
 		// Inicializacion y verificacion de exito de estructuras fundamentales
 		// y Extraccion de flags.
 		struct flags Flags_Active = init_structs(argc, argv);
-		if(Flags_Active.EXIT_MODE){ 
+		if (Flags_Active.EXIT_MODE){
 			ErrorArgument(argc, argv);
 			return EXIT_FAILURE;
 		}
 
-		// CHECK ESTRUCTURA FLAGS ACTIVE
-		/*if(Flags_Active.Region){
-			printf("\nRegion: %s", Flags_Active.info_region);
-		}
-		if(Flags_Active.Species){
-			printf("\nSpecie: %s", Flags_Active.info_species);
-		}
-		if(Flags_Active.Type){
-			printf("\nType: %s", Flags_Active.info_type);
-		}
-		if(Flags_Active.Nocount){
-			printf("\nNocount: ACTIVE");
-		} else {
-			printf("\nNocount: INACTIVE");
-		}
-		if(Flags_Active.List){
-			printf("\nList: ACTIVE");
-		} else {
-			printf("\nList: INACTIVE");
-		}
-		if(Flags_Active.Size){
-			printf("\nSize: ACTIVE");
-		} else {
-			printf("\nSize: INACTIVE");
-		}
-		if(Flags_Active.Name){
-			printf("\nName: %s", Flags_Active.info_name);
-		}
-		printf("\n");
-		*/
 		// FIN CHECK ESTRUCTURA.
-		if(getcwd(path, sizeof(path)) == NULL){
+		if (getcwd(path, sizeof(path)) == NULL){
 			perror("Error getting the current path");
 			return EXIT_FAILURE;
 		}
-		
+
+		// Funcion encargada de navegar por directorios y filtrar archivos
 		search_directories(path, Flags_Active, 0, &count, &total_size);
-		
+
 		printf("\n");
-		if(!Flags_Active.Nocount){
+		// Si se pide contar los archivos mostrar la cantidad
+		if (!Flags_Active.Nocount){
 			printf("Total files found: %d\n", count);
 		}
-		
-		if(Flags_Active.Size && !Flags_Active.List){
+
+		// Si se pide no contar los archivos y hay 0 archivos mostrar mensaje de error
+		if (Flags_Active.Nocount && count == 0){
+			printf("Not file found \n\n");
+		}
+
+		// Si se puede mostrar el tamaño de los archivos pero no se pide listarlo mostrar el tamaño total
+		if (Flags_Active.Size && !Flags_Active.List){
 			printf("Total amount of information found: %ldKb\n", total_size);
 		}
-			
-	} else {
+	}
+	else{
 		ErrorArgument(argc, argv);
 		return EXIT_FAILURE;
 	}

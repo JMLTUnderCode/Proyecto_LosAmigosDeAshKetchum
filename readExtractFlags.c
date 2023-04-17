@@ -1,17 +1,18 @@
 #include "readExtractFlags.h"
 
+/*Funcion que se encarga se mostrar los errores en caso de que los argumentos de la consola esten mal*/
 void ErrorArgument(int argc, char *argv[]){
 	printf("Error: Number/Names of arguments is incorrent.\n");
 	printf("Usage: %s ", argv[0]);
 	FORE(k, 1, argc)
-		printf(" %s", argv[k]);
+	printf(" %s", argv[k]);
 	printf("\nCorrect: ./fameChecker [-r <region>] [-s <species>] [-t <type>] [-c | --nocount] [-l | --list] [-sz | --size] [name]\n\n");
 	printf("    -r: Indica que debe limitarse la busqueda por region.\n");
 	printf("        El nombre de la region debe llevar la misma grafia\n");
 	printf("        que el directorio que la contiene.\n\n");
 	printf("    -s: Indica la especie:\n");
 	printf("        > \"pokemon\": para indicar que se debe contar solamente\n");
-	printf("                     los archivos HTML en lso directorios de\n");
+	printf("                     los archivos HTML en los directorios de\n");
 	printf("                     pokemones que correspondan con los criterios\n");
 	printf("                     de busqueda.\n");
 	printf("        > \"trainer\": para indicar que se debe contar solamente\n");
@@ -19,7 +20,7 @@ void ErrorArgument(int argc, char *argv[]){
 	printf("    -t: Indica el tipo de apariciones:\n");
 	printf("        > \"main\":       Para los personajes principales.\n");
 	printf("        > \"recurring\":  Para los personajes recurrentes.\n");
-	printf("        > \"gym_leader\": Para los lideres de gimnasio.\n");
+	printf("        > \"gym_leaders\": Para los lideres de gimnasio.\n");
 	printf("        > \"one_time\":   Para los personajes que aparecen solo una vez.\n\n");
 	printf("    -c o --nocount: Indica si debe aparecer el numero de archivos\n");
 	printf("                    encontrados.(Por defecto, se muestra.)\n");
@@ -31,7 +32,8 @@ void ErrorArgument(int argc, char *argv[]){
 	printf("                  se muestra.) Si esta incluido este flag, se muestra\n");
 	printf("                  a cada archivo encontrado su tamaño.\n\n");
 	printf("    [name]: Permite restringir la busqueda a archivos que comiencen\n");
-	printf("            con el nombre dado.\n\n");
+	printf("            con el nombre dado, si el nombre lleva apostrofe (el simbolo ').\n");
+	printf("            es necesario rodearlo con comillas dobles).\n\n");
 }
 
 struct flags init_structs(int argc, char *argv[]){
@@ -45,62 +47,86 @@ struct flags init_structs(int argc, char *argv[]){
 	Flags_Active.Size = FALSE;
 	Flags_Active.Name = FALSE;
 	Flags_Active.EXIT_MODE = FALSE;
-	
+
 	// Extraccion de Flags.
 	int cnt = 1;
-	while(cnt < argc){
-		if(argv[cnt][0] == '-'){
-			if( strcmp(argv[cnt], "-r") == 0 ) {
+	while (cnt < argc){
+		// Revisa que el argumento de la consola empiece en -, es decir que sea un flag
+		if (argv[cnt][0] == '-'){
+			// Revisa si la busqueda debe filtrarse por region
+			if (strcmp(argv[cnt], "-r") == 0){
 				Flags_Active.Region = TRUE;
 				cnt++;
-				if(argv[cnt][0] != '-'){
+
+				// Revisa que el siguiente argumento no sea un flag si no el valor del flag presente
+				// y luego se asigna el valor presente
+				if (argv[cnt][0] != '-'){
 					strncpy(Flags_Active.info_region, argv[cnt], 64);
-				} else {
+				}
+				else{
 					Flags_Active.EXIT_MODE = TRUE;
 					break;
 				}
-
-			} else if ( strcmp(argv[cnt], "-s") == 0 ) {
+			}
+			// Revisa si la busqueda debe filtrarse por especie
+			else if (strcmp(argv[cnt], "-s") == 0){
 				Flags_Active.Species = TRUE;
 				cnt++;
-				if(argv[cnt][0] != '-'){
-					strncpy(Flags_Active.info_species, argv[cnt], 64);				
-			} else {
+				// Revisa que el siguiente argumento no sea un flag si no el valor del flag presente
+				// y luego se asigna el valor presente
+				if (argv[cnt][0] != '-'){
+					strncpy(Flags_Active.info_species, argv[cnt], 64);
+				}
+				else{
 					Flags_Active.EXIT_MODE = TRUE;
 					break;
 				}
-
-			} else if ( strcmp(argv[cnt], "-t") == 0 ){
+			}
+			// Revisa si la busqueda debe filtrarse por tipos de apariciones
+			else if (strcmp(argv[cnt], "-t") == 0){
 				Flags_Active.Type = TRUE;
 				cnt++;
-				if(argv[cnt][0] != '-'){
+				// Revisa que el siguiente argumento no sea un flag si no el valor del flag presente
+				// y luego se asigna el valor presente
+				if (argv[cnt][0] != '-'){
 					strncpy(Flags_Active.info_type, argv[cnt], 64);
-				} else {
+				}
+				else{
 					Flags_Active.EXIT_MODE = TRUE;
 					break;
 				}
-			} else if ( strcmp(argv[cnt], "--nocount") == 0 || strcmp(argv[cnt], "-c") == 0 ) {
+			}
+			// Revisa si debe aparecer el numero de archivos mostrado
+
+			else if (strcmp(argv[cnt], "--nocount") == 0 || strcmp(argv[cnt], "-c") == 0){
 				Flags_Active.Nocount = TRUE;
+			}
 
-			} else if ( strcmp(argv[cnt], "--list") == 0 || strcmp(argv[cnt], "-l") == 0 ){
+			// Revisa si debe darse el nombre de los archivos
+			else if (strcmp(argv[cnt], "--list") == 0 || strcmp(argv[cnt], "-l") == 0){
 				Flags_Active.List = TRUE;
+			}
 
-			} else if ( strcmp(argv[cnt], "--size") == 0 || strcmp(argv[cnt], "-sz") == 0 ) {
+			// Revisa si debe mostrarse el tamaño de los archivos
+			else if (strcmp(argv[cnt], "--size") == 0 || strcmp(argv[cnt], "-sz") == 0){
 				Flags_Active.Size = TRUE;
-
-			} else {
+			}
+			else{
 				Flags_Active.EXIT_MODE = TRUE;
 				break;
 			}
-		
-		} else if ( Flags_Active.Name == 0 ) {
+		}
+
+		// Revisa si hay un nombre para filtrar
+		else if (Flags_Active.Name == 0){
 			Flags_Active.Name = TRUE;
 			strncpy(Flags_Active.info_name, argv[cnt], 64);
-			
-		} else {
+		}
+		else{
 			Flags_Active.EXIT_MODE = TRUE;
 			break;
 		}
+		// Ir a siguiente argumento de la consola
 		cnt++;
 	}
 

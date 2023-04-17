@@ -1,43 +1,55 @@
 #include "search_inodo.h"
 
-void print_info_file(char* file, struct flags act_flags, long int size){
-	if(act_flags.List){
-		if(!act_flags.Size){
+/*Esto muestra el nombre de los archivos en caso de que en la consola se haya pedido listarlos,
+dependiendo de si se pidio el tamaño de los archivos o no se mostrara el tamaño de estos en kilobytes*/
+void print_info_file(char *file, struct flags act_flags, long int size){
+	if (act_flags.List){
+		if (!act_flags.Size){
 			printf("%s\n", file);
-		}else{
+		}
+		else{
 			printf("%s | size: %ldKb\n", file, size);
 		}
 	}
 }
 
-
-int directory_exits(int level, char* folder, char* goal, struct flags act_flags){
-	char* temp;
-
-	if(level == 0 && (strcmp(folder, goal) == 0 || !act_flags.Region)){
-		//printf("region\n");
+/*Funcion que dice si el directorio existe o no*/
+int directory_exits(int level, char *folder, char *goal, struct flags act_flags) {
+	char *temp;
+	// Si el primer archivo es un folder con el nombre del objetivo o si no se pidio filtrar por region regresa true
+	if (level == 0 && (strcmp(folder, goal) == 0 || !act_flags.Region)){
 		return TRUE;
-	}else if(level == 1 && (strcmp(folder, goal) == 0 || !act_flags.Species)){
-		//printf("especie\n");
+	}
+	// Si el segundo archivo es un folder con el nombre del objetivo o si no se pidio filtrar por especie regresa true
+	else if (level == 1 && (strcmp(folder, goal) == 0 || !act_flags.Species)){
 		return TRUE;
-	}else if(level == 2 && (strcmp(folder, goal) == 0 || !act_flags.Type)){
-		//printf("tipo\n");
+	}
+	// Si el tercer archivo es un folder con el nombre del objetivo o si no se pidio filtrar por tipo de personaje regresa true
+	else if (level == 2 && (strcmp(folder, goal) == 0 || !act_flags.Type)){
 		return TRUE;
-	}else if(level == 3){
-		if(!act_flags.Name){
+	}
+	// Caso en el que se busca el cuarto archivo
+	else if (level == 3){
+		// Si no se tiene un nombre para filtrar regresar true
+		if (!act_flags.Name){
 			return TRUE;
 		}
-		
-		temp = calloc( (int)(strlen(goal)) , sizeof(char) );
-		
-		if(temp == NULL){
+		// Crear variable vacia
+		temp = calloc((int)(strlen(goal)), sizeof(char));
+
+		// Si temp es NULL ocurrio un error y no se puede asignar memoria
+		if (temp == NULL){
 			perror("Could not allocate memory");
 		}
+		// Copiar nombre del folder actual en temp
 		strncpy(temp, folder, strlen(goal));
-		if(strcmp(temp, goal) == 0){
+
+		// Revisar si nombre de temp es igual al del folder buscado
+		if (strcmp(temp, goal) == 0){
 			free(temp);
 			return TRUE;
 		}
+		// Liberar espacio en memoria de temp
 		free(temp);
 	}
 
@@ -48,86 +60,88 @@ int directory_exits(int level, char* folder, char* goal, struct flags act_flags)
  *Argumentos:
  *	dir_name: nombre del directorio a buscar.
  *		  dir_name = "." indica que se buscará iniciando desde la carpeta actual.
- *		  
+ *
  *	act_flags: flags activas al momento de usar el programa. Condicionan la búsqueda.
  */
 
-void search_directories(char* dir_name, struct flags act_flags, int level, int* count, long int* total_size){
+void search_directories(char *dir_name, struct flags act_flags, int level, int *count, long int *total_size)
+{
 	DIR *directory;
 	struct dirent *entry;
 	struct stat status;
 	int fd;
 	char *goal;
 
-	//abrimos el directorio
+	// abrimos el directorio
 	directory = opendir(dir_name);
-	
-	//printf("reading files in %s\n", dir_name);
-	
-	if(directory == NULL){
+
+	if (directory == NULL){
 		printf("Could not open directory\n");
 		return;
 	}
 
 	chdir(dir_name);
 
-	//printf("reading files in level: %d folder: %s\n", level, dir_name);
-	
 	goal = calloc(64, sizeof(char));
-	if(goal == NULL){
+	if (goal == NULL){
 		printf("Could not allocate memory");
 		return;
 	}
 
-	//leemos las entradas del directorio
-	if(level == 0 && act_flags.Region){
+	// leemos las entradas del directorio
+	if (level == 0 && act_flags.Region){
 		strcpy(goal, act_flags.info_region);
-	}else if(level == 1 && act_flags.Species){
+	}
+	else if (level == 1 && act_flags.Species){
 		strcpy(goal, act_flags.info_species);
-	}else if(level == 2 && act_flags.Type){
+	}
+	else if (level == 2 && act_flags.Type){
 		strcpy(goal, act_flags.info_type);
-	}else if(act_flags.Name){
+	}
+	else if (act_flags.Name){
 		strcpy(goal, act_flags.info_name);
 	}
-	
-	//entry = readdir(directory);
-	while( (entry = readdir(directory) ) != NULL){
-		
-		if(strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0 ){
+
+	while ((entry = readdir(directory)) != NULL){
+		// Obviar carpeta actual y anterior
+		if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0){
 			continue;
 		}
-
-		if(directory_exits(level, entry->d_name, goal, act_flags) == TRUE){
-			//printf("file -> %s\n", entry->d_name);
+		// Revisar si el directorio existe
+		if (directory_exits(level, entry->d_name, goal, act_flags) == TRUE){
 			fd = open(entry->d_name, O_RDONLY);
-			if(fd < 1){
+			// Caso donde archivo no puede abrirse
+			if (fd < 1){
 				printf("Can't open the file: %s\n", entry->d_name);
 				return;
-			}else if(fstat(fd, &status) == -1){
+			}
+			// Caso donde no puede leerse la informacion del archivo
+			else if (fstat(fd, &status) == -1){
 				printf("Error: can't get the file information of: %s\n", entry->d_name);
 			}
 
-			if(S_ISDIR(status.st_mode)){
-				//se deben obviar la carpeta actual y la anterior
-				if(strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0 ){
+			if (S_ISDIR(status.st_mode)){
+				// se deben obviar la carpeta actual y la anterior
+				if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0){
 					continue;
 				}
-				search_directories(entry->d_name, act_flags, level+1, count, total_size);
-			}else{
-				if(strstr(entry->d_name, ".html") != NULL){
-					print_info_file(entry->d_name, act_flags, status.st_size/1024);
-					*(count)+=1;
-					*(total_size) += (status.st_size/1024);	
+				// Llamar funcion recursivamente con el siguiente nivel
+				search_directories(entry->d_name, act_flags, level + 1, count, total_size);
+			}
+			else{
+				if (strstr(entry->d_name, ".html") != NULL){
+					// Mostrar data del archivo actual
+					print_info_file(entry->d_name, act_flags, status.st_size / 1024);
+					// Aumentar en 1 la cantidad de archivos
+					*(count) += 1;
+					// Aumentar tamaño total de los archivos
+					*(total_size) += (status.st_size / 1024);
 				}
-
 			}
 			close(fd);
 		}
-
-		//entry = readdir(directory);
 	}
 	free(goal);
 	chdir("..");
 	closedir(directory);
 }
-
