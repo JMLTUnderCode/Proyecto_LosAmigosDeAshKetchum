@@ -51,15 +51,15 @@ struct flags init_structs(int argc, char *argv[]){
 	// Extraccion de Flags.
 	int cnt = 1;
 	while (cnt < argc){
-		// Revisa que el argumento de la consola empiece en -, es decir que sea un flag
+		// Revisa que el argumento de la consola empiece en -, es decir que sea un flag.
 		if (argv[cnt][0] == '-'){
-			// Revisa si la busqueda debe filtrarse por region
+			// Revisa si la busqueda debe filtrarse por region.
 			if (strcmp(argv[cnt], "-r") == 0){
 				Flags_Active.Region = TRUE;
 				cnt++;
 
 				// Revisa que el siguiente argumento no sea un flag si no el valor del flag presente
-				// y luego se asigna el valor presente
+				// y luego se asigna el valor presente.
 				if (argv[cnt][0] != '-'){
 					strncpy(Flags_Active.info_region, argv[cnt], 64);
 				}
@@ -68,12 +68,12 @@ struct flags init_structs(int argc, char *argv[]){
 					break;
 				}
 			}
-			// Revisa si la busqueda debe filtrarse por especie
+			// Revisa si la busqueda debe filtrarse por especie.
 			else if (strcmp(argv[cnt], "-s") == 0){
 				Flags_Active.Species = TRUE;
 				cnt++;
 				// Revisa que el siguiente argumento no sea un flag si no el valor del flag presente
-				// y luego se asigna el valor presente
+				// y luego se asigna el valor presente.
 				if (argv[cnt][0] != '-'){
 					strncpy(Flags_Active.info_species, argv[cnt], 64);
 				}
@@ -82,12 +82,12 @@ struct flags init_structs(int argc, char *argv[]){
 					break;
 				}
 			}
-			// Revisa si la busqueda debe filtrarse por tipos de apariciones
+			// Revisa si la busqueda debe filtrarse por tipos de apariciones.
 			else if (strcmp(argv[cnt], "-t") == 0){
 				Flags_Active.Type = TRUE;
 				cnt++;
 				// Revisa que el siguiente argumento no sea un flag si no el valor del flag presente
-				// y luego se asigna el valor presente
+				// y luego se asigna el valor presente.
 				if (argv[cnt][0] != '-'){
 					strncpy(Flags_Active.info_type, argv[cnt], 64);
 				}
@@ -96,28 +96,30 @@ struct flags init_structs(int argc, char *argv[]){
 					break;
 				}
 			}
-			// Revisa si debe aparecer el numero de archivos mostrado
 
+			// Revisa si debe aparecer el numero de archivos mostrado.
 			else if (strcmp(argv[cnt], "--nocount") == 0 || strcmp(argv[cnt], "-c") == 0){
 				Flags_Active.Nocount = TRUE;
 			}
 
-			// Revisa si debe darse el nombre de los archivos
+			// Revisa si debe darse el nombre de los archivos.
 			else if (strcmp(argv[cnt], "--list") == 0 || strcmp(argv[cnt], "-l") == 0){
 				Flags_Active.List = TRUE;
 			}
 
-			// Revisa si debe mostrarse el tamaño de los archivos
+			// Revisa si debe mostrarse el tamaño de los archivos.
 			else if (strcmp(argv[cnt], "--size") == 0 || strcmp(argv[cnt], "-sz") == 0){
 				Flags_Active.Size = TRUE;
 			}
+
+			// En cualquier otro caso, estamos en un problema de mal input.
 			else{
 				Flags_Active.EXIT_MODE = TRUE;
 				break;
 			}
 		}
 
-		// Revisa si hay un nombre para filtrar
+		// Revisa si hay un nombre para filtrar.
 		else if (Flags_Active.Name == 0){
 			Flags_Active.Name = TRUE;
 			strncpy(Flags_Active.info_name, argv[cnt], 64);
@@ -126,7 +128,7 @@ struct flags init_structs(int argc, char *argv[]){
 			Flags_Active.EXIT_MODE = TRUE;
 			break;
 		}
-		// Ir a siguiente argumento de la consola
+		// Ir a siguiente argumento de la consola.
 		cnt++;
 	}
 

@@ -1,5 +1,5 @@
 /* Archivo de extension .h encargado de verificar y extraer los datos
- * de Flags proporcionados por llamada en programa main.c
+ * de Flags proporcionados por llamada en programa main.
  */
 
 #include "standard_lib.h"
@@ -13,18 +13,18 @@
 // Estructura de datos para almacenar la informacion de los flahs activos
 // segun la serie de argumentos dados por consola.
 struct flags{
-	int Region;					 // Si la busqueda debe limitarse por region
-	char info_region[buf_flag];	 // La region a buscar
-	int Species;				 // Si la busqueda debe limitarse por especie
-	char info_species[buf_flag]; // La especia a buscar
-	int Type;					 // Si la busqueda debe limitarse por tipo de personaje
-	char info_type[buf_flag];	 // El tipo se personaje a buscar
-	int Nocount;				 // Si el numero de archivos no debe aparecer
-	int List;					 // Si debe mostarse el numero de archivos
-	int Size;					 // Si debe mostrarse el tamaño en kilobytes de los archivos
-	int Name;					 // Si la busqueda de un archivo se restringira por nombre
-	char info_name[buf_flag];	 // El nombre con el que se restringira la busqueda de los archivos
-	int EXIT_MODE;				 // Si hay un error y el programa debe cerrarse
+	int Region;                  // Si la busqueda debe limitarse por region.
+	char info_region[buf_flag];  // La region a buscar.
+	int Species;                 // Si la busqueda debe limitarse por especie.
+	char info_species[buf_flag]; // La especia a buscar.
+	int Type;                    // Si la busqueda debe limitarse por tipo de personaje.
+	char info_type[buf_flag];    // El tipo se personaje a buscar.
+	int Nocount;                 // Si el numero de archivos no debe aparecer.
+	int List;                    // Si debe mostarse el numero de archivos.
+	int Size;                    // Si debe mostrarse el tamaño en kilobytes de los archivos.
+	int Name;                    // Si la busqueda de un archivo se restringira por nombre.
+	char info_name[buf_flag];    // El nombre con el que se restringira la busqueda de los archivos.
+	int EXIT_MODE;				       // Si hay un error y el programa debe cerrarse.
 };
 
 /***********************************************************************************/

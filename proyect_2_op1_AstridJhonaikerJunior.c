@@ -10,8 +10,9 @@
  * Jhonaiker Blanco 18-10784
  * Junior Lara      17-10303
  *
- * PD:
- *
+ * PD: El Makefile asociado a este programa genera una carpeta 
+ * contenedora de archivos .o usados para la compilacion exitosa
+ * de "fameChecker".
  *
  */
 
@@ -20,7 +21,7 @@
 
 int main(int argc, char *argv[]){
 	// Verificacion de argumentos de entrada.
-	if (argc > 1 && argc < 12){
+	if (argc > 0 && argc < 12){
 		long int total_size = 0;
 		int count = 0;
 		char path[PATH_MAX];
@@ -33,13 +34,13 @@ int main(int argc, char *argv[]){
 			return EXIT_FAILURE;
 		}
 
-		// FIN CHECK ESTRUCTURA.
+		// Extraemos la direccion de la carpeta donde este programa se ejecuta.
 		if (getcwd(path, sizeof(path)) == NULL){
 			perror("Error getting the current path");
 			return EXIT_FAILURE;
 		}
 
-		// Funcion encargada de navegar por directorios y filtrar archivos
+		// Funcion encargada de navegar por directorios y filtrar archivos.
 		search_directories(path, Flags_Active, 0, &count, &total_size);
 
 		printf("\n");
@@ -48,17 +49,17 @@ int main(int argc, char *argv[]){
 			printf("Total files found: %d\n", count);
 		}
 
-		// Si se pide no contar los archivos y hay 0 archivos mostrar mensaje de error
+		// Si se pide no contar los archivos y hay 0 archivos mostrar mensaje de error.
 		if (Flags_Active.Nocount && count == 0){
 			printf("Not file found \n\n");
 		}
 
-		// Si se puede mostrar el tamaño de los archivos pero no se pide listarlo mostrar el tamaño total
+		// Si se puede mostrar el tamaño de los archivos pero no se pide listarlo mostrar el tamaño total.
 		if (Flags_Active.Size && !Flags_Active.List){
 			printf("Total amount of information found: %ldKb\n", total_size);
 		}
-	}
-	else{
+	// Error de datos entrantes.
+	} else{
 		ErrorArgument(argc, argv);
 		return EXIT_FAILURE;
 	}
