@@ -3,6 +3,5 @@
 - Universidad Simon Bolivar Enero-Marzo 2023. 
 - Participantes:
   * Astrid Alvarado
-  * Laura Parilli
   * Jhonaiker Blanco
   * Junior Lara.
